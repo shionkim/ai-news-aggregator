@@ -1,5 +1,7 @@
-import Image from "next/image";
+import ArticleImage from "../atoms/ArticleImage";
 import Link from "next/link";
+import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
+import { formatDate } from "@/utils/formatDate";
 
 const API_KEY = "pub_644e6b1197d244e69e9d459f5533af0e";
 
@@ -12,22 +14,23 @@ interface Article {
   image_url?: string;
   source_name: string;
   language: string;
+  category?: string[];
 }
 
-const capitalizeFirstLetter = (str: string) =>
-  str.charAt(0).toUpperCase() + str.slice(1);
+interface NewsArticlesProps {
+  category?: string; // dynamic category
+}
 
-export default async function NewsArticles() {
-  const res = await fetch(
-    `https://newsdata.io/api/1/latest?apikey=${API_KEY}`,
-    {
-      cache: "no-store", // always fetch fresh news
-    }
-  );
+export default async function NewsArticles({ category }: NewsArticlesProps) {
+  // Build API URL dynamically
+  const url = `https://newsdata.io/api/1/latest?apikey=${API_KEY}${
+    category ? `&category=${category}` : ""
+  }`;
 
+  const res = await fetch(url, { cache: "no-store" });
   const data = await res.json();
 
-  // Handle 429 / Rate Limit error
+  // Handle rate limit
   if (
     res.status === 429 ||
     (data.status === "error" && data.results?.code === "RateLimitExceeded")
@@ -37,23 +40,15 @@ export default async function NewsArticles() {
     return <p>{message}</p>;
   }
 
-  // Ensure articles is always an array
   const articles: Article[] = Array.isArray(data.results) ? data.results : [];
 
-  // Fallback for empty articles
   if (articles.length === 0) {
-    return (
-      <p>
-        No articles available at the moment. Try refreshing the page after 10
-        seconds.
-      </p>
-    );
+    return <p>No articles available at the moment.</p>;
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+    <div className="grid grid-cols-1 @3xl:grid-cols-2 @5xl:grid-cols-3 gap-x-8 gap-y-16">
       {articles.map((article) => {
-        // Build query string for the article
         const queryParams = new URLSearchParams({
           title: article.title,
           description: article.description || "",
@@ -68,40 +63,33 @@ export default async function NewsArticles() {
           <Link
             key={article.article_id}
             href={`/articles/${article.article_id}?${queryParams}`}
-            className="flex flex-col gap-6 hover:scale-[1.02] transition-transform duration-200"
+            className="flex flex-col gap-6 lg:hover:scale-[1.02] transition-transform duration-200"
           >
-            <Image
+            <ArticleImage
               src={
                 article.image_url && article.image_url.trim() !== ""
                   ? `/api/proxy-image?url=${encodeURIComponent(
                       article.image_url
                     )}`
-                  : `/gradients/dark${Math.floor(Math.random() * 12) + 1}.svg`
+                  : undefined
               }
               alt={article.title}
-              width={500}
-              height={300}
-              className="w-full aspect-[5/3] object-cover rounded-md border border-gray-100"
             />
+
             <div className="flex flex-col gap-2">
               <h2 className="text-xl font-semibold">{article.title}</h2>
               {article.description && (
-                <p>
-                  {article.description
-                    ? article.description.slice(0, 100) +
-                      (article.description.length > 100 ? "…" : "")
-                    : ""}
+                <p className="text-gray-700">
+                  {article.description.length > 100
+                    ? article.description.slice(0, 100) + "…"
+                    : article.description}
                 </p>
               )}
             </div>
             <div className="flex flex-col gap-1">
               <p className="font-semibold text-sm">{article.source_name}</p>
-              <p className="text-sm">
-                {new Date(article.pubDate).toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
+              <p className="text-sm text-gray-600">
+                {formatDate(article.pubDate)}
                 {" • "}
                 {capitalizeFirstLetter(article.language)}
               </p>

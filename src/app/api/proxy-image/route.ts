@@ -4,16 +4,12 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const url = searchParams.get("url");
 
-  if (!url) {
-    return NextResponse.json({ error: "Missing URL" }, { status: 400 });
-  }
+  if (!url) return NextResponse.json({ error: "Missing URL" }, { status: 400 });
 
   try {
-    // Fetch the external image
     const response = await fetch(url);
 
-    if (!response.ok)
-      throw new Error(`Image not reachable: ${response.status}`);
+    if (!response.ok) throw new Error("Image not reachable");
 
     const contentType = response.headers.get("content-type") || "image/jpeg";
     const buffer = Buffer.from(await response.arrayBuffer());
@@ -23,9 +19,7 @@ export async function GET(request: Request) {
       headers: { "Content-Type": contentType },
     });
   } catch (err) {
-    console.error("Proxy image error:", err);
-
-    // Return 404 so the component uses its own SVG fallback
-    return new NextResponse(null, { status: 404 });
+    console.error("Proxy error:", err);
+    return NextResponse.json({ error: "Image not reachable" }, { status: 404 });
   }
 }

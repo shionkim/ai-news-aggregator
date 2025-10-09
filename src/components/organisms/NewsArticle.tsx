@@ -1,8 +1,10 @@
 "use client"; // Needed for state/hooks
 
-import Image from "next/image";
+import ArticleImage from "../atoms/ArticleImage";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
+import { formatDate } from "@/utils/formatDate";
 
 interface NewsArticleProps {
   title: string;
@@ -14,9 +16,6 @@ interface NewsArticleProps {
   language?: string;
   className?: string;
 }
-
-const capitalizeFirstLetter = (str: string) =>
-  str.charAt(0).toUpperCase() + str.slice(1);
 
 export default function NewsArticle({
   title,
@@ -66,12 +65,8 @@ export default function NewsArticle({
             )}
 
             {pubDate && language && (
-              <p className="text-sm">
-                {new Date(pubDate).toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
+              <p className="text-sm text-gray-600">
+                {formatDate(pubDate)}
                 {" • "}
                 {capitalizeFirstLetter(language)}
               </p>
@@ -90,18 +85,16 @@ export default function NewsArticle({
           )}
         </div>
       </div>
-
-      <Image
-        src={
-          image_url && image_url.trim() !== ""
-            ? `/api/proxy-image?url=${encodeURIComponent(image_url)}`
-            : `/gradients/dark${Math.floor(Math.random() * 12) + 1}.svg`
-        }
-        alt={title}
-        width={800}
-        height={500}
-        className="max-w-7xl mx-auto aspect-[16/9] object-cover rounded-md border border-gray-100"
-      />
+      <div className="w-3xl mx-auto">
+        <ArticleImage
+          src={
+            image_url && image_url.trim() !== ""
+              ? `/api/proxy-image?url=${encodeURIComponent(image_url)}`
+              : undefined
+          }
+          alt={title}
+        />
+      </div>
 
       {/* Loading & content */}
       <div className="prose max-w-2xl mx-auto">
@@ -113,10 +106,12 @@ export default function NewsArticle({
           </p>
         )}
         {!loading && (
-          <div className="prose">
-            {fullContent.split(/\n+/).map((para, i) => (
-              <p key={i}>{para.trim()}</p>
-            ))}
+          <div className="prose text-gray-700 flex flex-col gap-4">
+            {fullContent
+              .split(/\n+/)
+              .map((para, i) =>
+                para.trim() ? <p key={i}>{para.trim()}</p> : null
+              )}
           </div>
         )}
       </div>

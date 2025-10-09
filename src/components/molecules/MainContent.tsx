@@ -1,4 +1,3 @@
-// components/Container.tsx
 import { ReactNode } from "react";
 
 interface ContainerProps {
@@ -6,13 +5,13 @@ interface ContainerProps {
   className?: string;
 }
 
-export default function Container({
+export default function MainContent({
   children,
   className = "",
 }: ContainerProps) {
   return (
     <div
-      className={`px-4 py-8 sm:px-8 sm:py-16 max-w-7xl mx-auto ${className}`}
+      className={`@container flex flex-col flex-1 max-w-7xl mx-auto px-4 py-8 sm:px-8 sm:py-16 ${className}`}
     >
       {children}
     </div>

@@ -1,5 +1,5 @@
-import NewsArticle from "@/components/NewsArticle";
-import Container from "@/components/Container";
+import NewsArticle from "@/components/organisms/NewsArticle";
+import Layout from "@/components/molecules/Layout";
 
 interface ArticlePageProps {
   searchParams: {
@@ -15,7 +15,7 @@ interface ArticlePageProps {
 
 export default function ArticlePage({ searchParams }: ArticlePageProps) {
   return (
-    <Container>
+    <Layout>
       <NewsArticle
         title={searchParams.title}
         description={searchParams.description} // show summary immediately
@@ -25,6 +25,6 @@ export default function ArticlePage({ searchParams }: ArticlePageProps) {
         source_name={searchParams.source_name}
         language={searchParams.language}
       />
-    </Container>
+    </Layout>
   );
 }
