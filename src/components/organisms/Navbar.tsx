@@ -4,41 +4,58 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CATEGORIES } from "@/libs/categories";
 import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
+import { Button } from "@/components/base/buttons/button";
+import { MessageCheckSquare } from "@untitledui/icons";
 
 export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="w-64 sticky top-0 h-screen border-r border-gray-100 text-gray-600">
-      <div className="flex flex-col h-full px-4 pt-8 sm:px-4 sm:pt-16">
-        <div className="mb-8 px-4">
+    <nav className="hidden w-64 sticky top-0 h-screen border-r border-gray-200 text-gray-600 md:block">
+      <div className="flex flex-col h-full">
+        <div className="px-8 pt-8 mb-8 sm:pt-16">
           <p className="text-2xl font-semibold text-gray-900">TrustedAI</p>
         </div>
 
         {/* Scrollable categories */}
-        <ul className="flex flex-col gap-2 overflow-y-scroll pb-8 sm:pb-16">
+
+        <ul className="flex flex-col gap-1 overflow-y-scroll px-4 pb-3 sm:px-4">
           {CATEGORIES.map((cat) => {
             const href = cat === "top" ? "/" : `/${cat}`;
             const isActive = pathname === href;
 
             return (
               <li key={cat}>
-                <Link
-                  href={href}
-                  className={`
-                    block px-4 py-2 rounded-xl font-medium text-gray-600
-                    ${
-                      isActive ? "bg-gray-50 text-gray-900" : "hover:bg-gray-50"
-                    }
-                    transition-colors
-                  `}
-                >
-                  {capitalizeFirstLetter(cat)}
+                <Link href={href} className="flex flex-col">
+                  <Button
+                    color="tertiary"
+                    size="md"
+                    className={`justify-start transition ${
+                      isActive ? "bg-gray-50" : ""
+                    }`}
+                  >
+                    {capitalizeFirstLetter(cat)}
+                  </Button>
                 </Link>
               </li>
             );
           })}
         </ul>
+        <div className="px-4 mb-4">
+          <div className="border-b border-gray-200"></div>
+        </div>
+        <div className="px-4 pb-8 sm:pb-16">
+          <Link href="" className="flex flex-col">
+            <Button
+              color="tertiary"
+              size="md"
+              className="justify-start"
+              iconLeading={MessageCheckSquare}
+            >
+              Feedback
+            </Button>
+          </Link>
+        </div>
       </div>
     </nav>
   );

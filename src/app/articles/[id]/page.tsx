@@ -1,29 +1,53 @@
 import NewsArticle from "@/components/organisms/NewsArticle";
 import Layout from "@/components/molecules/Layout";
 
+// In newer Next.js versions `searchParams` can be a Promise; await it before use.
 interface ArticlePageProps {
-  searchParams: {
-    title: string;
-    description?: string;
-    link?: string;
-    pubDate?: string;
-    image_url?: string;
-    source_name?: string;
-    language?: string;
-  };
+  // allow searchParams to be a Record or a Promise resolving to one
+  searchParams:
+    | Record<string, string | string[] | undefined>
+    | Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default function ArticlePage({ searchParams }: ArticlePageProps) {
+function toSingleString(
+  value: string | string[] | undefined
+): string | undefined {
+  if (Array.isArray(value)) return value[0];
+  if (typeof value === "string") return value;
+  return undefined;
+}
+
+function normalizeParam(value: string | string[] | undefined) {
+  const single = toSingleString(value);
+  if (!single) return undefined;
+  try {
+    return decodeURIComponent(single.replace(/\+/g, " "));
+  } catch (e) {
+    return single.replace(/\+/g, " ");
+  }
+}
+
+export default async function ArticlePage({ searchParams }: ArticlePageProps) {
+  const params = await searchParams;
+
+  const title = normalizeParam(params.title) || "";
+  const description = normalizeParam(params.description);
+  const link = normalizeParam(params.link);
+  const pubDate = normalizeParam(params.pubDate);
+  const image_url = normalizeParam(params.image_url);
+  const source_name = normalizeParam(params.source_name);
+  const language = normalizeParam(params.language);
+
   return (
     <Layout>
       <NewsArticle
-        title={searchParams.title}
-        description={searchParams.description} // show summary immediately
-        link={searchParams.link} // full content fetched inside NewsArticle
-        pubDate={searchParams.pubDate}
-        image_url={searchParams.image_url}
-        source_name={searchParams.source_name}
-        language={searchParams.language}
+        title={title}
+        description={description} // show summary immediately
+        link={link} // full content fetched inside NewsArticle
+        pubDate={pubDate}
+        image_url={image_url}
+        source_name={source_name}
+        language={language}
       />
     </Layout>
   );

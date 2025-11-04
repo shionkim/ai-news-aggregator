@@ -1,6 +1,7 @@
 import NewsArticles from "@/components/molecules/ArticleGrid";
 import { CATEGORIES } from "@/libs/categories";
 import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
+import LangPicker from "@/components/molecules/LangPicker";
 
 interface ArticleListProps {
   category?: string;
@@ -14,10 +15,13 @@ export default function ArticleList({ category = "top" }: ArticleListProps) {
   }
 
   return (
-    <div>
-      <h1 className="text-4xl font-semibold pb-8">
-        {capitalizeFirstLetter(normalizedCategory)}
-      </h1>
+    <div className="@container">
+      <div className="flex flex-row justify-between mb-8 items-end">
+        <h1 className="text-4xl font-semibold">
+          {capitalizeFirstLetter(normalizedCategory)}
+        </h1>
+        <LangPicker />
+      </div>
       <NewsArticles category={normalizedCategory} />
     </div>
   );
