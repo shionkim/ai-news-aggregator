@@ -45,7 +45,10 @@ export default function Navbar() {
           <div className="border-b border-gray-200"></div>
         </div>
         <div className="px-4 pb-8 sm:pb-16">
-          <Link href="" className="flex flex-col">
+          <Link
+            href="https://form.typeform.com/to/ojusTKFw"
+            className="flex flex-col"
+          >
             <Button
               color="tertiary"
               size="md"

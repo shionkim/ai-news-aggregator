@@ -59,7 +59,7 @@ export default function NavbarMobile() {
 
           {/* Feedback Button fixed at bottom */}
           <div className="px-2 py-4 border-t border-gray-200">
-            <Link href="">
+            <Link href="https://form.typeform.com/to/ojusTKFw">
               <Button
                 color="tertiary"
                 size="sm"
