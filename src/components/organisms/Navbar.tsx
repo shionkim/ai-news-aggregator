@@ -18,7 +18,7 @@ export default function Navbar() {
           <Image
             src="/assets/logo/logo.svg"
             width={170}
-            height={40}
+            height={33}
             alt="Logo"
           />
         </div>
