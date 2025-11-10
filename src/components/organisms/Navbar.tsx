@@ -6,6 +6,7 @@ import { CATEGORIES } from "@/libs/categories";
 import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
 import { Button } from "@/components/base/buttons/button";
 import { MessageCheckSquare } from "@untitledui/icons";
+import Image from "next/image";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -14,7 +15,12 @@ export default function Navbar() {
     <nav className="hidden w-64 sticky top-0 h-screen border-r border-gray-200 text-gray-600 md:block">
       <div className="flex flex-col h-full">
         <div className="px-8 pt-8 mb-8 sm:pt-16">
-          <p className="text-2xl font-semibold text-gray-900">TrustedAI</p>
+          <Image
+            src="/logo/trustedAI.svg"
+            width={170}
+            height={200}
+            alt="Logo"
+          />
         </div>
 
         {/* Scrollable categories */}

@@ -7,6 +7,7 @@ import { CATEGORIES } from "@/libs/categories";
 import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
 import { Button } from "@/components/base/buttons/button";
 import { MessageCheckSquare, Menu01, X } from "@untitledui/icons";
+import Image from "next/image";
 
 export default function NavbarMobile() {
   const pathname = usePathname();
@@ -18,7 +19,7 @@ export default function NavbarMobile() {
     <>
       {/* Mobile Header (visible when menu closed) */}
       <div className="flex items-center justify-between px-4 py-3 md:hidden sm:px-8 border-b border-gray-200">
-        <p className="text-2xl font-semibold text-gray-900">TrustedAI</p>
+        <Image src="/logo/trustedAI.svg" width={140} height={100} alt="Logo" />
         <button onClick={toggleMenu}>
           <Menu01 className="w-6 h-6" />
         </button>
@@ -29,7 +30,12 @@ export default function NavbarMobile() {
         <div className="fixed inset-0 z-50 bg-white md:hidden flex flex-col h-screen">
           {/* Overlay Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 sm:px-8">
-            <p className="text-2xl font-semibold text-gray-900">TrustedAI</p>
+            <Image
+              src="/logo/trustedAI.svg"
+              width={140}
+              height={100}
+              alt="Logo"
+            />
             <button onClick={toggleMenu}>
               <X className="w-6 h-6" />
             </button>
