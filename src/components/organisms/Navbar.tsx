@@ -30,9 +30,12 @@ export default function Navbar() {
                   <Button
                     color="tertiary"
                     size="md"
-                    className={`justify-start transition ${
-                      isActive ? "bg-gray-50" : ""
-                    }`}
+                    className={`justify-start transition 
+                      ${
+                        isActive
+                          ? "bg-gray-100"
+                          : "bg-transparent hover:bg-gray-100"
+                      }`}
                   >
                     {capitalizeFirstLetter(cat)}
                   </Button>

@@ -1,14 +1,16 @@
 import Layout from "@/components/molecules/Layout";
 import ArticleList from "@/components/organisms/ArticleList";
 
-interface PageProps {
-  params?: { category?: string };
-}
+export default async function CategoryPage({
+  params,
+}: {
+  params: Promise<{ category?: string }>;
+}) {
+  const { category } = await params; // ✅ unwrap the Promise
 
-export default function CategoryPage({ params }: PageProps) {
   return (
     <Layout>
-      <ArticleList category={params?.category} />
+      <ArticleList category={category} />
     </Layout>
   );
 }

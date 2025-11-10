@@ -1,4 +1,4 @@
-import NewsArticles from "@/components/molecules/ArticleGrid";
+import NewsArticles from "@/components/molecules/NewsArticles";
 import { CATEGORIES } from "@/libs/categories";
 import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
 import LangPicker from "@/components/molecules/LangPicker";
@@ -8,21 +8,21 @@ interface ArticleListProps {
 }
 
 export default function ArticleList({ category = "top" }: ArticleListProps) {
-  const normalizedCategory = category;
+  // If the category is invalid, fallback to "top"
+  const validCategory = CATEGORIES.includes(category) ? category : "top";
 
-  if (!CATEGORIES.includes(normalizedCategory)) {
-    return <p>Category not found.</p>;
-  }
+  // Optional: log for debugging
+  console.log("ArticleList category:", validCategory);
 
   return (
     <div className="@container">
       <div className="flex flex-row justify-between mb-8 items-end">
         <h1 className="text-4xl font-semibold">
-          {capitalizeFirstLetter(normalizedCategory)}
+          {capitalizeFirstLetter(validCategory)}
         </h1>
         <LangPicker />
       </div>
-      <NewsArticles category={normalizedCategory} />
+      <NewsArticles category={validCategory} />
     </div>
   );
 }

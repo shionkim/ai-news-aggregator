@@ -23,6 +23,8 @@ export default async function NewsArticles({ category }: NewsArticlesProps) {
   const url = `https://newsdata.io/api/1/latest?apikey=${API_KEY}${
     category ? `&category=${category}` : ""
   }`;
+  // Optional: log for debugging
+  console.log("NewsArticles url:", url);
 
   const res = await fetch(url, { cache: "no-store" });
   const data = await res.json();

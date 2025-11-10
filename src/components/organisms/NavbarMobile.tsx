@@ -47,7 +47,7 @@ export default function NavbarMobile() {
                     color="tertiary"
                     size="sm"
                     className={`w-full justify-start transition ${
-                      isActive ? "bg-gray-50" : ""
+                      isActive ? "bg-gray-10" : ""
                     }`}
                   >
                     {capitalizeFirstLetter(cat)}
@@ -58,7 +58,7 @@ export default function NavbarMobile() {
           </div>
 
           {/* Feedback Button fixed at bottom */}
-          <div className="px-2 py-4 border-t border-gray-200">
+          <div className="px-2 py-4 pb-16 border-t border-gray-200">
             <Link href="https://form.typeform.com/to/ojusTKFw">
               <Button
                 color="tertiary"
