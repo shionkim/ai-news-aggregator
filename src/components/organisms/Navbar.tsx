@@ -16,9 +16,9 @@ export default function Navbar() {
       <div className="flex flex-col h-full">
         <div className="px-8 pt-8 mb-8 sm:pt-16">
           <Image
-            src="/logo/trustedai.svg"
+            src="/assets/logo/logo.svg"
             width={170}
-            height={200}
+            height={40}
             alt="Logo"
           />
         </div>

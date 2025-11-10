@@ -10,9 +10,9 @@
 <path d="M174.266 35.0001H169.323L176.855 13.1819H182.8L190.321 35.0001H185.378L179.913 18.1677H179.742L174.266 35.0001ZM173.957 26.4241H185.634V30.0249H173.957V26.4241Z" fill="#181D27"/>
 <path d="M197.56 13.1819V35.0001H192.947V13.1819H197.56Z" fill="#181D27"/>
 <defs>
-<linearGradient id="paint0_linear_14882_2279" x1="-0.000747503" y1="47.9997" x2="47.9994" y2="-0.000584423" gradientUnits="userSpaceOnUse">
-<stop stop-color="#0017E4"/>
-<stop offset="1" stop-color="#3793FF"/>
+<linearGradient id="paint0_linear_14882_2279" x1="48" y1="48" x2="48" y2="0" gradientUnits="userSpaceOnUse">
+<stop stop-color="#00C6FB"/>
+<stop offset="1" stop-color="#005BEA"/>
 </linearGradient>
 </defs>
 </svg>

@@ -19,7 +19,7 @@ export default function NavbarMobile() {
     <>
       {/* Mobile Header (visible when menu closed) */}
       <div className="flex items-center justify-between px-4 py-3 md:hidden sm:px-8 border-b border-gray-200">
-        <Image src="/logo/trustedai.svg" width={140} height={100} alt="Logo" />
+        <Image src="/assets/logo/logo.svg" width={140} height={40} alt="Logo" />
         <button onClick={toggleMenu}>
           <Menu01 className="w-6 h-6" />
         </button>
@@ -31,7 +31,7 @@ export default function NavbarMobile() {
           {/* Overlay Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 sm:px-8">
             <Image
-              src="/logo/trustedai.svg"
+              src="/assets/logo/logo.svg"
               width={140}
               height={100}
               alt="Logo"
