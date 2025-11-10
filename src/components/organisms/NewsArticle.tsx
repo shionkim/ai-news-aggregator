@@ -182,22 +182,30 @@ export default function NewsArticle({
         )}
         {!loading && (
           <div>
-            {translating && (
+            {/* Dynamic badge */}
+            {!translateError && (
               <BadgeWithDot
                 type="modern"
-                color="warning"
+                color={translating ? "warning" : "success"}
                 size="md"
                 className="mb-6"
               >
-                Translating
+                {translating
+                  ? "Translating"
+                  : translatedContent
+                  ? "Translated"
+                  : ""}
               </BadgeWithDot>
             )}
+
+            {/* Translation error */}
             {translateError && (
               <p className="text-red-600 mb-2">
                 Translation failed; showing original text.
               </p>
             )}
 
+            {/* Article content */}
             <div className="prose text-gray-700 flex flex-col gap-4">
               {(translatedContent ?? fullContent)
                 .split(/\n+/)
