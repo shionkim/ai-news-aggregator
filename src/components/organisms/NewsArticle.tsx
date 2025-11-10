@@ -173,7 +173,11 @@ export default function NewsArticle({
 
       {/* Loading & content */}
       <div className="prose max-w-2xl w-full mx-auto">
-        {loading && <p className="text-gray-500">Loading full article…</p>}
+        {loading && (
+          <BadgeWithDot type="modern" color="error" size="md">
+            Fetching article
+          </BadgeWithDot>
+        )}
         {fetchError && (
           <p className="text-red-600 mb-2">
             Full article could not be fetched due to technical restrictions.
