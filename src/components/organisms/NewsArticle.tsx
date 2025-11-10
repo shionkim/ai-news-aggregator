@@ -172,7 +172,7 @@ export default function NewsArticle({
       </div>
 
       {/* Loading & content */}
-      <div className="prose max-w-2xl mx-auto">
+      <div className="prose max-w-2xl w-full mx-auto">
         {loading && <p className="text-gray-500">Loading full article…</p>}
         {fetchError && (
           <p className="text-red-600 mb-2">
