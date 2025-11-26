@@ -69,7 +69,16 @@ export default function ArticleCardClient({ article }: { article: Article }) {
         const first = Array.isArray(data?.translated)
           ? data.translated[0]
           : null;
-        if (mounted && first) setTranslated(first);
+
+        if (mounted && first) {
+          if ((first as any).error) {
+            setError((first as any).error); // set error state
+            setTranslated(null); // clear translated state
+          } else {
+            setTranslated(first); // set translated
+            setError(null); // clear error state
+          }
+        }
       } catch (err: any) {
         console.error(err);
         if (mounted) setError(err.message || "Failed to translate");
