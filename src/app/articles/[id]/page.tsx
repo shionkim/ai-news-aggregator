@@ -42,10 +42,10 @@ export default async function ArticlePage({ searchParams }: ArticlePageProps) {
         title={title}
         description={description} // show summary immediately
         link={link} // full content fetched inside NewsArticle
-        pubDate={pubDate}
+        pubDate={pubDate || ''}
         image_url={image_url}
         source_name={source_name}
-        language={language}
+        language={language || ''}
       />
     </Layout>
   )
