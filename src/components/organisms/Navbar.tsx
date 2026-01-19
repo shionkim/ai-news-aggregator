@@ -13,7 +13,7 @@ export default function Navbar() {
 
   return (
     <nav className=" top-0 border-b border-gray-200 text-gray-600 md:sticky md:h-screen md:border-r">
-      <div className="flex h-full px-3 py-3 items-center gap-6 justify-between md:flex-col md:py-6 md:justify-start">
+      <div className="flex h-full px-3 py-2 items-center gap-6 justify-between md:flex-col md:py-6 md:justify-start">
         <Image src="/assets/logo/logo.svg" width={32} height={32} alt="Logo" priority />
 
         <div className="flex md:flex-col gap-1">

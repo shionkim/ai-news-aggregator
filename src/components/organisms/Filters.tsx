@@ -8,6 +8,7 @@ import { XClose } from '@untitledui/icons'
 import { Checkbox } from '@/components/base/checkbox/checkbox'
 import { Categories } from '@/libs/categories'
 import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
+import { Input } from '../base/input/input'
 
 export default function Filters() {
   const { isFiltersOpen, closeFilters } = useSidebar()
@@ -15,12 +16,17 @@ export default function Filters() {
   const router = useRouter()
 
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [keyword, setKeyword] = useState('')
+
   const maxSelection = 5
 
-  // initialize selected categories from query string
+  // 🔹 Initialize from URL
   useEffect(() => {
-    const current = searchParams.get('category')
-    if (current) setSelectedCategories(current.split(','))
+    const categoryParam = searchParams.get('category')
+    const keywordParam = searchParams.get('q')
+
+    if (categoryParam) setSelectedCategories(categoryParam.split(','))
+    if (keywordParam) setKeyword(keywordParam)
   }, [searchParams])
 
   if (!isFiltersOpen) return null
@@ -39,10 +45,23 @@ export default function Filters() {
 
   const handleApply = () => {
     const params = new URLSearchParams()
-    if (selectedCategories.length) params.set('category', selectedCategories.join(','))
-    // future filters: params.set('language', selectedLanguage)
-    router.push(`?${params.toString()}`)
+
+    if (selectedCategories.length) {
+      params.set('category', selectedCategories.join(','))
+    }
+
+    if (keyword.trim()) {
+      params.set('q', keyword.trim())
+    }
+
+    router.push(`/?${params.toString()}`)
     closeFilters()
+  }
+
+  const handleClear = () => {
+    setSelectedCategories([])
+    setKeyword('')
+    router.push('/')
   }
 
   return (
@@ -51,38 +70,45 @@ export default function Filters() {
       <div
         className="fixed inset-0 bg-black/50 backdrop-blur-xs md:hidden"
         onClick={closeFilters}
-      ></div>
+      />
 
       {/* Sidebar */}
-      <div className="fixed inset-x-0 top-0 h-dvh flex flex-col gap-8 md:sticky md:top-0 md:h-dvh">
+      <div className="fixed inset-x-0 top-0 h-dvh flex flex-col gap-8 md:sticky md:top-0 z-10">
         <div className="md:hidden"></div>
-        <div className="border-t rounded-t-2xl border-gray-200 text-gray-700 h-full bg-white md:w-2xs md:border-r md:border-t-0 md:rounded-none overflow-hidden">
+        <div className="border-t rounded-t-2xl border-gray-200 h-full bg-white md:w-2xs md:border-r md:rounded-none">
           <div className="flex flex-col h-full">
             {/* Header */}
-            <div className="flex flex-col px-4 py-6 gap-6 border-b border-gray-200 bg-white relative md:px-3">
-              <div className="flex flex-col gap-1">
-                <div>
-                  <p className="text-xl font-semibold text-gray-900">Filters</p>
-                  <Button
-                    color="tertiary"
-                    size="sm"
-                    iconLeading={<XClose data-icon />}
-                    aria-label="Close Filters"
-                    className="absolute top-3 right-3 md:hidden"
-                    onClick={closeFilters}
-                  />
-                </div>
-                <p className="text-sm">Select criteria to filter news articles.</p>
-              </div>
+            <div className="px-4 py-6 border-b border-gray-200 relative">
+              <p className="text-xl font-semibold">Filters</p>
+              <Button
+                color="tertiary"
+                size="sm"
+                iconLeading={<XClose />}
+                className="absolute top-3 right-3 md:hidden"
+                onClick={closeFilters}
+              />
+              <p className="text-sm text-gray-700">Select criteria to filter news articles.</p>
             </div>
 
-            {/* Category list */}
-            <div className="flex flex-col px-4 py-6 flex-1 overflow-y-auto gap-3 md:px-3">
+            <div className="flex-1 px-4 py-6 gap-6 flex flex-col">
+              {/* Keywords */}
+              <div className="flex flex-col gap-3">
+                <p className="font-semibold">Keywords</p>
+                <Input
+                  value={keyword}
+                  onChange={setKeyword}
+                  hint="Search news articles for specific keywords."
+                  placeholder="AI, Technology, Geopolitics..."
+                />
+              </div>
+
+              {/* Categories */}
               <div className="flex flex-col gap-3">
                 <div className="flex flex-col gap-0">
-                  <p className="font-semibold text-gray-900">Category</p>
-                  <p className="text-sm">Select up to five.</p>
+                  <p className="font-semibold">Categories</p>
+                  <p className="text-sm text-gray-600">Select up to five.</p>
                 </div>
+
                 <div className="grid grid-cols-2 gap-2">
                   {Categories.map((category) => (
                     <Checkbox
@@ -98,20 +124,12 @@ export default function Filters() {
               </div>
             </div>
 
-            {/* Footer buttons */}
-            <div className="flex px-4 py-4 border-t border-gray-200 gap-2 md:px-3">
-              <Button
-                color="secondary"
-                size="md"
-                className="flex-1"
-                onClick={() => {
-                  setSelectedCategories([])
-                  router.push('/')
-                }}
-              >
+            {/* Footer */}
+            <div className="px-4 py-4 border-t border-gray-200 flex gap-3 md:gap-3">
+              <Button color="secondary" className="flex-1" onClick={handleClear}>
                 Clear All
               </Button>
-              <Button color="primary" size="md" className="flex-1" onClick={handleApply}>
+              <Button color="primary" className="flex-1" onClick={handleApply}>
                 Apply
               </Button>
             </div>

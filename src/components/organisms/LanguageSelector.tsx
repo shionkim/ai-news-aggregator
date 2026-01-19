@@ -20,13 +20,13 @@ export default function LanguageSelector() {
         onClick={closeLanguage}
       ></div>
 
-      <div className="fixed inset-x-0 top-0 h-dvh flex flex-col gap-8 md:sticky md:top-0 md:h-dvh">
+      <div className="fixed inset-x-0 top-0 h-dvh flex flex-col gap-8 z-10 md:sticky md:top-0 md:h-dvh">
         <div className="md:hidden"></div>
         <div className="border-t rounded-t-2xl border-gray-200 text-gray-700 bg-white md:w-2xs md:border-r md:border-t-0 md:rounded-none overflow-hidden">
           <div className="flex flex-col h-full">
             {/* Header */}
-            <div className="flex flex-col px-4 py-6 gap-6 border-b border-gray-200 bg-white relative md:px-3">
-              <div className="flex flex-col gap-1 ">
+            <div className="flex flex-col px-4 py-6 gap-6 border-b border-gray-200 bg-white relative">
+              <div className="flex flex-col ">
                 <div>
                   <p className="text-xl font-semibold text-gray-900">Article language</p>
                   <Button
@@ -43,7 +43,7 @@ export default function LanguageSelector() {
             </div>
 
             {/* Language list */}
-            <div className="flex flex-col px-4 py-6 flex-1 overflow-y-auto gap-3 md:px-3">
+            <div className="flex flex-col px-4 py-6 flex-1 overflow-y-auto gap-3">
               {Object.entries(languageNameMap).map(([code, lang]) => {
                 const isSelected = selected.id === code
 

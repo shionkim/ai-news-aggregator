@@ -14,21 +14,23 @@ interface Article {
 }
 
 interface PageProps {
-  searchParams: Promise<{ [key: string]: string | undefined }> // must unwrap
+  searchParams: Promise<{ [key: string]: string | undefined }>
 }
 
 const API_KEY = process.env.NEWS_API_KEY
 
 export default async function FilterPage({ searchParams }: PageProps) {
-  // ✅ unwrap the searchParams promise
   const params = await searchParams
+
   const categoryParam = params.category
-  // future filters: const languageParam = params.language
+  const keywordParam = params.q
 
-  let url = `https://newsdata.io/api/1/latest?apikey=${API_KEY}`
+  let url = `https://newsdata.io/api/1/latest?apikey=${API_KEY}&removeduplicate=1`
+
   if (categoryParam) url += `&category=${categoryParam}`
+  if (keywordParam) url += `&q=${encodeURIComponent(keywordParam)}`
 
-  console.log('URL:', url) // debug log
+  console.log('Filters URL:', url)
 
   let content
 

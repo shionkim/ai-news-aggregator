@@ -124,8 +124,8 @@ export default function NewsArticle({
   return (
     <div className="flex flex-col gap-12">
       {/* Title and metadata */}
-      <div className="w-full flex flex-col gap-8 max-w-2xl mx-auto">
-        <h1 className="text-4xl font-semibold">{title}</h1>
+      <div className="w-full flex flex-col gap-6 md:gap-8 max-w-2xl mx-auto">
+        <h1 className="text-3xl md:text-4xl font-semibold">{title}</h1>
         <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2">
           <div className="flex flex-col gap-1">
             {source_name && <p className="text-sm font-semibold">{source_name}</p>}
@@ -166,10 +166,10 @@ export default function NewsArticle({
 
       {/* Article content */}
       <div className="prose max-w-2xl w-full mx-auto">
-        {loading && <p>Loading full article...</p>}
+        {loading && <p className="text-center">Loading full article...</p>}
 
         {fetchError && (
-          <p className="text-red-600 mb-2">
+          <p className="text-red-600 mb-8 text-center">
             Full article could not be fetched due to technical restrictions. Displaying summary
             instead.
           </p>
@@ -178,7 +178,9 @@ export default function NewsArticle({
         {!loading && (
           <div>
             {translateError && (
-              <p className="text-red-600 mb-2">Translation failed; showing original text.</p>
+              <p className="text-red-600 mb-8 text-center">
+                Translation failed, showing original text.
+              </p>
             )}
 
             <div className="prose text-gray-700 flex flex-col gap-4">
