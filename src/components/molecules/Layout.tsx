@@ -1,17 +1,21 @@
-import Navbar from "@/components/organisms/Navbar";
-import NavbarMobile from "@/components/organisms/NavbarMobile";
-import MainContent from "@/components/molecules/MainContent";
+'use client'
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+import Navbar from '@/components/organisms/Navbar'
+
+import MainContent from '@/components/molecules/MainContent'
+import LanguageSelector from '../organisms/LanguageSelector'
+import { SidebarProvider } from '@/context/SidebarContext'
+import Filters from '../organisms/Filters'
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col md:flex-row">
-      <Navbar />
-      <NavbarMobile />
-      <MainContent>{children}</MainContent>
-    </div>
-  );
+    <SidebarProvider>
+      <div className="flex flex-col md:flex-row">
+        <Navbar />
+        <LanguageSelector />
+        <Filters />
+        <MainContent>{children}</MainContent>
+      </div>
+    </SidebarProvider>
+  )
 }

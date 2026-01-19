@@ -1,54 +1,31 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { getLangNameFromCode } from "language-name-map";
+import { createContext, useContext, useState, ReactNode } from "react";
+import languageNameMap from "language-name-map/map";
 
-type LangItem = { id: string; name: string; native?: string; icon?: any };
+type Language = {
+  id: string;
+  name: string;
+  native: string;
+};
 
-interface LanguageContextValue {
-  selected: LangItem;
-  setSelected: (l: LangItem) => void;
+interface LanguageContextType {
+  selected: Language;
+  setSelected: (lang: Language) => void;
 }
 
-const defaultLang: LangItem = { id: "en", name: "English", native: "English" };
+const defaultLanguage: Language = {
+  id: "en",
+  name: languageNameMap["en"].name,
+  native: languageNameMap["en"].native,
+};
 
-const LanguageContext = createContext<LanguageContextValue | undefined>(
-  undefined
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined,
 );
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [selected, setSelectedState] = useState<LangItem>(defaultLang);
-
-  // Load persisted selection from localStorage on mount
-  useEffect(() => {
-    try {
-      const stored =
-        typeof window !== "undefined"
-          ? localStorage.getItem("preferred_language")
-          : null;
-      if (stored) {
-        const id = stored;
-        const lang = getLangNameFromCode(id as any);
-        if (lang)
-          setSelectedState({ id, name: lang.name, native: lang.native });
-      }
-    } catch (e) {
-      // ignore
-    }
-  }, []);
-
-  // Wrap setter to persist
-  const setSelected = (l: LangItem) => {
-    setSelectedState(l);
-    try {
-      if (typeof window !== "undefined")
-        localStorage.setItem("preferred_language", l.id);
-    } catch (e) {
-      // ignore
-    }
-  };
+export const LanguageProvider = ({ children }: { children: ReactNode }) => {
+  const [selected, setSelected] = useState<Language>(defaultLanguage);
 
   return (
     <LanguageContext.Provider value={{ selected, setSelected }}>
@@ -57,18 +34,8 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export function useLanguage() {
+export const useLanguage = (): LanguageContextType => {
   const ctx = useContext(LanguageContext);
-  // If the context is missing (e.g. during SSR or before provider mounts), return a safe default
-  if (!ctx) {
-    return {
-      selected: defaultLang,
-      setSelected: (_: LangItem) => {
-        /* noop fallback to avoid crashes when provider is absent */
-      },
-    };
-  }
+  if (!ctx) throw new Error("useLanguage must be used within LanguageProvider");
   return ctx;
-}
-
-export default LanguageProvider;
+};
