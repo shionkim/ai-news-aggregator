@@ -18,7 +18,7 @@ export default function LanguageSelector() {
       <div className="fixed inset-0 bg-black/50 backdrop-blur-xs md:hidden"></div>
 
       <div className="fixed inset-x-0 top-8 border-t rounded-t-2xl border-gray-200 text-gray-700 bg-white h-screen md:sticky md:top-0 md:w-2xs md:border-r md:border-t-0 md:rounded-none overflow-hidden">
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-dvh">
           {/* Header */}
           <div className="flex flex-col px-4 py-6 gap-6 border-b border-gray-200 bg-white relative md:px-3">
             <div className="flex flex-col gap-1 ">
