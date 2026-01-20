@@ -24,11 +24,15 @@ export default async function FilterPage({ searchParams }: PageProps) {
 
   const categoryParam = params.category
   const keywordParam = params.q
+  const countryParam = params.country
+  const languageParam = params.lang
 
   let url = `https://newsdata.io/api/1/latest?apikey=${API_KEY}&removeduplicate=1`
 
   if (categoryParam) url += `&category=${categoryParam}`
   if (keywordParam) url += `&q=${encodeURIComponent(keywordParam)}`
+  if (countryParam) url += `&country=${countryParam}`
+  if (languageParam) url += `&language=${languageParam}`
 
   console.log('Filters URL:', url)
 
@@ -46,7 +50,10 @@ export default async function FilterPage({ searchParams }: PageProps) {
 
       content =
         articles.length === 0 ? (
-          <p className="p-4">No articles found for "{categoryParam}".</p>
+          <p className="p-4">
+            No articles found for {categoryParam ? `"${categoryParam}"` : ''}{' '}
+            {countryParam ? `in countries: "${countryParam}"` : ''}
+          </p>
         ) : (
           <div className="grid grid-cols-1 @2xl:grid-cols-2 @5xl:grid-cols-3 gap-x-8 gap-y-16">
             {articles.map((article) => (

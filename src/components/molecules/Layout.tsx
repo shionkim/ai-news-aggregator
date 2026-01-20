@@ -10,11 +10,18 @@ import Filters from '../organisms/Filters'
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider>
-      <div className="flex flex-col md:flex-row">
+      {/* 1. h-screen + overflow-hidden locks the main window */}
+      <div className="flex flex-col md:flex-row h-dvh overflow-clip">
         <Navbar />
         <LanguageSelector />
+
+        {/* 2. Filters needs to occupy its own scroll area */}
         <Filters />
-        <MainContent>{children}</MainContent>
+
+        {/* 3. MainContent needs flex-1 and its own overflow-y-auto */}
+        <main className="flex-1 overflow-y-auto">
+          <MainContent>{children}</MainContent>
+        </main>
       </div>
     </SidebarProvider>
   )

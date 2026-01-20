@@ -28,7 +28,7 @@ export default function ArticleImage({ src, alt }: ArticleImageProps) {
     <img
       src={imgSrc}
       alt={alt}
-      className="w-full aspect-5/3 object-cover rounded-md border border-gray-200"
+      className="w-full aspect-5/3 object-cover rounded-xl border border-gray-200"
       onError={handleError}
     />
   )
