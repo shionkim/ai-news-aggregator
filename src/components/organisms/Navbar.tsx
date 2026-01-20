@@ -1,6 +1,6 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/base/buttons/button'
 import { FilterLines, MessageCheckSquare, Translate01 } from '@untitledui/icons'
 import { Tooltip, TooltipTrigger } from '@/components/base/tooltip/tooltip'
@@ -10,6 +10,14 @@ import { useSidebar } from '@/context/SidebarContext'
 export default function Navbar() {
   const pathname = usePathname()
   const { toggleLanguage, isLanguageOpen, toggleFilters, isFiltersOpen } = useSidebar()
+
+  const searchParams = useSearchParams()
+
+  const hasActiveFilters =
+    searchParams.has('category') ||
+    searchParams.has('country') ||
+    searchParams.has('lang') ||
+    searchParams.has('q')
 
   return (
     <nav className=" top-0 border-b border-gray-200 text-gray-600 md:sticky md:h-screen md:border-r">
@@ -32,7 +40,7 @@ export default function Navbar() {
           <Tooltip title="Filters" placement="right">
             <TooltipTrigger className="group relative flex cursor-pointer flex-col items-center gap-2 text-fg-quaternary transition duration-100 ease-linear hover:text-fg-quaternary_hover focus:text-fg-quaternary_hover">
               <Button
-                color={isFiltersOpen ? 'secondary' : 'tertiary'}
+                color={isFiltersOpen ? 'secondary' : hasActiveFilters ? 'primary' : 'tertiary'}
                 size="sm"
                 iconLeading={<FilterLines data-icon />}
                 aria-label="Filters"

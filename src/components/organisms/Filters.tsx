@@ -37,7 +37,7 @@ function StickySectionHeader({ children }: { children: React.ReactNode }) {
   return (
     <div
       ref={ref}
-      className={`sticky top-[-1px] z-10 px-4 bg-white py-3 transition-colors duration-200 ${
+      className={`sticky -top-px z-10 px-4 bg-white py-3 transition-colors duration-200 ${
         isStuck ? 'border-b border-gray-200' : 'border-b border-transparent'
       }`}
     >
