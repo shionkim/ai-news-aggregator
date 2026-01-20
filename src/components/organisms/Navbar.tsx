@@ -1,75 +1,68 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { CATEGORIES } from "@/libs/categories";
-import { capitalizeFirstLetter } from "@/utils/capitalizeFirstLetter";
-import { Button } from "@/components/base/buttons/button";
-import { MessageCheckSquare } from "@untitledui/icons";
-import Image from "next/image";
+import { usePathname, useSearchParams } from 'next/navigation'
+import { Button } from '@/components/base/buttons/button'
+import { FilterLines, MessageCheckSquare, Translate01 } from '@untitledui/icons'
+import { Tooltip, TooltipTrigger } from '@/components/base/tooltip/tooltip'
+import Image from 'next/image'
+import { useSidebar } from '@/context/SidebarContext'
 
 export default function Navbar() {
-  const pathname = usePathname();
+  const pathname = usePathname()
+  const { toggleLanguage, isLanguageOpen, toggleFilters, isFiltersOpen } = useSidebar()
+
+  const searchParams = useSearchParams()
+
+  const hasActiveFilters =
+    searchParams.has('category') ||
+    searchParams.has('country') ||
+    searchParams.has('lang') ||
+    searchParams.has('q')
 
   return (
-    <nav className="hidden w-64 sticky top-0 h-screen border-r border-gray-200 text-gray-600 md:block">
-      <div className="flex flex-col h-full">
-        <div className="px-8 pt-8 mb-8 sm:pt-16">
-          <Image
-            src="/assets/logo/logo.svg"
-            width={170}
-            height={33}
-            alt="Logo"
-            priority
-          />
-        </div>
+    <nav className=" top-0 border-b border-gray-200 text-gray-600 md:sticky md:h-screen md:border-r">
+      <div className="flex h-full px-3 py-2 items-center gap-6 justify-between md:flex-col md:py-6 md:justify-start">
+        <Image src="/assets/logo/logo.svg" width={32} height={32} alt="Logo" priority />
 
-        {/* Scrollable categories */}
+        <div className="flex md:flex-col gap-1">
+          <Tooltip title="Article language" placement="right">
+            <TooltipTrigger className="group relative flex cursor-pointer flex-col items-center gap-2 text-fg-quaternary transition duration-100 ease-linear hover:text-fg-quaternary_hover focus:text-fg-quaternary_hover">
+              <Button
+                color={isLanguageOpen ? 'secondary' : 'tertiary'}
+                size="sm"
+                iconLeading={<Translate01 data-icon />}
+                aria-label="Article language"
+                onClick={toggleLanguage}
+              ></Button>
+            </TooltipTrigger>
+          </Tooltip>
 
-        <ul className="flex flex-col gap-1 overflow-y-scroll px-4 pb-3 sm:px-4">
-          {CATEGORIES.map((cat) => {
-            const href = cat === "top" ? "/" : `/${cat}`;
-            const isActive = pathname === href;
+          <Tooltip title="Filters" placement="right">
+            <TooltipTrigger className="group relative flex cursor-pointer flex-col items-center gap-2 text-fg-quaternary transition duration-100 ease-linear hover:text-fg-quaternary_hover focus:text-fg-quaternary_hover">
+              <Button
+                color={isFiltersOpen ? 'secondary' : hasActiveFilters ? 'primary' : 'tertiary'}
+                size="sm"
+                iconLeading={<FilterLines data-icon />}
+                aria-label="Filters"
+                onClick={toggleFilters}
+              ></Button>
+            </TooltipTrigger>
+          </Tooltip>
 
-            return (
-              <li key={cat}>
-                <Link href={href} className="flex flex-col">
-                  <Button
-                    color="tertiary"
-                    size="md"
-                    className={`justify-start transition 
-                      ${
-                        isActive
-                          ? "bg-gray-100"
-                          : "bg-transparent hover:bg-gray-100"
-                      }`}
-                  >
-                    {capitalizeFirstLetter(cat)}
-                  </Button>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-        <div className="px-4 mb-4">
-          <div className="border-b border-gray-200"></div>
-        </div>
-        <div className="px-4 pb-8 sm:pb-16">
-          <Link
-            href="https://form.typeform.com/to/ojusTKFw"
-            className="flex flex-col"
-          >
-            <Button
-              color="tertiary"
-              size="md"
-              className="justify-start"
-              iconLeading={MessageCheckSquare}
-            >
-              Feedback
-            </Button>
-          </Link>
+          <Tooltip title="Feedback" placement="right">
+            <TooltipTrigger className="group relative flex cursor-pointer flex-col items-center gap-2 text-fg-quaternary transition duration-100 ease-linear hover:text-fg-quaternary_hover focus:text-fg-quaternary_hover">
+              <a href="https://form.typeform.com/to/ojusTKFw" target="_blank">
+                <Button
+                  color="tertiary"
+                  size="sm"
+                  iconLeading={<MessageCheckSquare data-icon />}
+                  aria-label="Feedback"
+                ></Button>
+              </a>
+            </TooltipTrigger>
+          </Tooltip>
         </div>
       </div>
     </nav>
-  );
+  )
 }

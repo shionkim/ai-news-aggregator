@@ -1,19 +1,16 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react'
 
 interface ContainerProps {
-  children: ReactNode;
-  className?: string;
+  children: ReactNode
+  className?: string
 }
 
-export default function MainContent({
-  children,
-  className = "",
-}: ContainerProps) {
+export default function MainContent({ children, className = '' }: ContainerProps) {
   return (
     <div
-      className={`@container flex flex-col w-full sm:flex-1 max-w-7xl mx-auto px-4 py-8 sm:px-8 sm:py-16 ${className}`}
+      className={`@container flex flex-col w-full sm:flex-1 max-w-7xl mx-auto px-4 py-8 sm:px-8 sm:py-12 ${className}`}
     >
       {children}
     </div>
-  );
+  )
 }

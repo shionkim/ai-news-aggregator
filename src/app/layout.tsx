@@ -1,17 +1,17 @@
-import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import "./globals.css";
-import { LanguageProvider } from "@/context/LanguageContext";
+import type { Metadata } from 'next'
+import { GeistSans } from 'geist/font/sans'
+import './globals.css'
+import { LanguageProvider } from '@/context/LanguageContext'
 
 export const metadata: Metadata = {
-  title: "TrustedAI",
-  description: "AI-powered news aggregator you can count on.",
-};
+  title: 'TrustedAI',
+  description: 'AI-powered news aggregator you can count on.',
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en">
@@ -19,5 +19,5 @@ export default function RootLayout({
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
-  );
+  )
 }

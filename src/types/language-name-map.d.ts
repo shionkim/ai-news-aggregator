@@ -1,10 +1,12 @@
-declare module "language-name-map" {
-  export interface LangInfo {
-    name: string;
-    native: string;
-    dir: "ltr" | "rtl" | number;
-  }
+declare module "language-name-map/map" {
+  const languageNameMap: Record<
+    string,
+    {
+      name: string;
+      dir: number;
+      native: string;
+    }
+  >;
 
-  export function getLangNameFromCode(code: string): LangInfo;
-  export function getLangCodeList(): string[];
+  export default languageNameMap;
 }

@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import axios from "axios";
 import { translateTextBatch } from "@/libs/translate";
-import { getLangNameFromCode } from "language-name-map";
+import languageNameMap from "language-name-map/map";
 
 const API_KEY = process.env.NEWS_API_KEY;
 
@@ -20,13 +19,16 @@ export async function GET(request: Request) {
     // If no articles return empty
     if (!articles.length) return NextResponse.json([]);
 
-    const targetLangName = getLangNameFromCode(lang)?.name || lang || "English";
+    const targetLangName = languageNameMap[lang]?.name || lang || "English";
 
     const translated = await translateTextBatch(articles, targetLangName);
 
     return NextResponse.json({ original: articles, translated });
   } catch (err) {
     console.error(err);
-    return NextResponse.json({ error: "Failed to fetch or translate" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch or translate" },
+      { status: 500 },
+    );
   }
 }
