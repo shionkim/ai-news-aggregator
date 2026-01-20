@@ -141,7 +141,7 @@ export default function Filters() {
           </div>
 
           {/* Body */}
-          <div className="flex flex-col flex-1 gap-0 overflow-y-auto overflow-anchor-none -webkit-overflow-scrolling-touch">
+          <div className="flex flex-col flex-1 gap-0 overflow-y-auto overflow-anchor-none -webkit-overflow-scrolling-touch transform-gpu">
             {/* Keywords */}
             <div className="flex flex-col pt-3">
               <StickySectionHeader>
