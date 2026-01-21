@@ -115,7 +115,9 @@ export default function Filters() {
     setSelectedCountries([])
     setSelectedLanguages([])
     setKeyword('')
+
     router.push('/')
+    closeFilters()
   }
 
   return (
