@@ -21,7 +21,7 @@ export default function Navbar() {
     searchParams.has('q')
 
   return (
-    <nav className=" top-0 border-b border-gray-200 text-gray-600 md:sticky md:h-screen md:border-r">
+    <nav className="top-0 border-b border-gray-200 text-gray-600 md:sticky md:h-screen md:border-r">
       <div className="flex h-full px-3 py-2 items-center gap-6 justify-between md:flex-col md:py-6 md:justify-start">
         <Link href="/">
           <Image src="/assets/logo/logo.svg" width={32} height={32} alt="Logo" priority />
