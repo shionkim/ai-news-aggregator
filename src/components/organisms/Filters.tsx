@@ -125,7 +125,7 @@ export default function Filters() {
         onClick={closeFilters}
       />
 
-      <div className="fixed inset-x-0 bottom-0 flex flex-col gap-8 md:sticky md:top-0 z-10 overflow-clip border-t rounded-t-2xl border-gray-200 h-[calc(100dvh-2rem)] md:h-svh bg-white md:w-xs md:border-r md:rounded-none md:border-t-0">
+      <div className="fixed inset-x-0 bottom-0 flex flex-col gap-8 md:sticky md:top-0 z-10 overflow-hidden border-t rounded-t-2xl border-gray-200 h-[calc(100dvh-2rem)] md:h-svh bg-white md:w-xs md:border-r md:rounded-none md:border-t-0">
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="px-4 py-6 border-b border-gray-200 relative bg-white">
