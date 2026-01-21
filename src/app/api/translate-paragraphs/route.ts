@@ -39,9 +39,32 @@ export async function POST(request: Request) {
 
     if (!text) return NextResponse.json({ translated: '' })
 
-    const prompt = `Translate the following text into ${targetLang}. Preserve paragraph breaks and formatting. Return ONLY the translated text with the same paragraph structure and do not add any commentary. If the next is already written in ${targetLang}, return the original text unchanged.\n\n${text}`
+    const prompt = `
+    Translate the following text into ${targetLang}.
+    The output MUST be in ${targetLang} (do not use any other language).
+    Preserve all paragraph breaks and formatting.
+    Do not include explanations, commentary, or summaries.
+    Return only the translated text.
+
+    TEXT:
+    ${text}
+    `.trim()
+
+    // 🔍 LOG FULL PROMPT
+    console.log('========== TRANSLATION REQUEST ==========')
+    console.log('Provider:', provider)
+    console.log('Target language:', targetLang)
+    console.log('Prompt sent to model:\n', prompt)
+    console.log('========================================')
 
     const translated = await translatePrompt(prompt)
+
+    // 🔍 LOG FULL RESPONSE
+    console.log('========== TRANSLATION RESPONSE ==========')
+    console.log(translated)
+    console.log('========================================')
+
+    console.log('/api/translate-paragraphs prompt:', prompt)
 
     return NextResponse.json({ translated })
   } catch (err: any) {

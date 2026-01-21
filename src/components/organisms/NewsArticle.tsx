@@ -74,8 +74,8 @@ export default function NewsArticle({
     const targetLangName = selected?.name || 'English'
 
     // Skip translation if original article language matches selected
-    const originalLang = language || targetLangName
-    if (originalLang === targetLangName) {
+    const originalLang = language || 'English'
+    if (originalLang.toLowerCase() === targetLangName.toLowerCase()) {
       setTranslatedContent(null)
       setTranslateError(false)
       setTranslating(false)
@@ -95,7 +95,7 @@ export default function NewsArticle({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             text: fullContent,
-            targetLang: targetLangName,
+            targetLang: selected.name,
           }),
           signal: controller.signal,
         })
