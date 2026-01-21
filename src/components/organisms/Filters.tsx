@@ -187,7 +187,7 @@ export default function Filters() {
                 <p className="font-semibold">Countries</p>
                 <p className="text-sm text-gray-600">Select up to five.</p>
               </StickySectionHeader>
-              <div className="grid grid-cols-2 gap-2 pb-3">
+              <div className="grid grid-cols-2 gap-2">
                 {Object.entries(Countries).map(([name, code]) => (
                   <Checkbox
                     key={code}
