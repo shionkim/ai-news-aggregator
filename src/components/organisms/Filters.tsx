@@ -160,10 +160,10 @@ export default function Filters() {
 
             {/* Categories */}
             <div className="flex flex-col pt-3">
-              <div className="py-3 px-4">
+              <StickySectionHeader>
                 <p className="font-semibold">Categories</p>
                 <p className="text-sm text-gray-600">Select up to five.</p>
-              </div>
+              </StickySectionHeader>
               <div className="grid grid-cols-2 gap-2">
                 {Categories.map((category) => (
                   <Checkbox
