@@ -144,9 +144,8 @@ export default function Filters() {
           <div className="flex flex-col flex-1 gap-0 overflow-y-auto overflow-anchor-none -webkit-overflow-scrolling-touch transform-gpu">
             {/* Keywords */}
             <div className="flex flex-col pt-3">
-              <StickySectionHeader>
-                <p className="font-semibold">Keywords</p>
-              </StickySectionHeader>
+              <p className="font-semibold py-3 px-4">Keywords</p>
+
               <div className="px-4">
                 <Input
                   value={keyword}
@@ -159,10 +158,10 @@ export default function Filters() {
 
             {/* Categories */}
             <div className="flex flex-col pt-3">
-              <StickySectionHeader>
+              <div className="py-3 px-4">
                 <p className="font-semibold">Categories</p>
                 <p className="text-sm text-gray-600">Select up to five.</p>
-              </StickySectionHeader>
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 {Categories.map((category) => (
                   <Checkbox
