@@ -73,9 +73,8 @@ export default function NewsArticle({
 
     const targetLangName = selected?.name || 'English'
 
-    // Skip translation if original article language matches selected
-    const originalLang = language || 'English'
-    if (originalLang.toLowerCase() === targetLangName.toLowerCase()) {
+    // Only skip translation if we **know the article language** and it matches the selected language
+    if (language && language.toLowerCase() === targetLangName.toLowerCase()) {
       setTranslatedContent(null)
       setTranslateError(false)
       setTranslating(false)
