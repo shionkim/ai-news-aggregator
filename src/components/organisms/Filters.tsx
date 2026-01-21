@@ -123,7 +123,7 @@ export default function Filters() {
   return (
     <div>
       <div
-        className="fixed inset-0 bg-black/50 backdrop-blur-xs md:hidden"
+        className="fixed h-svh inset-0 bg-black/50 backdrop-blur-xs md:hidden"
         onClick={closeFilters}
       />
 
