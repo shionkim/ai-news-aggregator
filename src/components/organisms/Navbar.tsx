@@ -6,6 +6,7 @@ import { FilterLines, MessageCheckSquare, Translate01 } from '@untitledui/icons'
 import { Tooltip, TooltipTrigger } from '@/components/base/tooltip/tooltip'
 import Image from 'next/image'
 import { useSidebar } from '@/context/SidebarContext'
+import Link from 'next/dist/client/link'
 
 export default function Navbar() {
   const pathname = usePathname()
@@ -22,8 +23,9 @@ export default function Navbar() {
   return (
     <nav className=" top-0 border-b border-gray-200 text-gray-600 md:sticky md:h-screen md:border-r">
       <div className="flex h-full px-3 py-2 items-center gap-6 justify-between md:flex-col md:py-6 md:justify-start">
-        <Image src="/assets/logo/logo.svg" width={32} height={32} alt="Logo" priority />
-
+        <Link href="/">
+          <Image src="/assets/logo/logo.svg" width={32} height={32} alt="Logo" priority />
+        </Link>
         <div className="flex md:flex-col gap-1">
           <Tooltip title="Article language" placement="right">
             <TooltipTrigger className="group relative flex cursor-pointer flex-col items-center gap-2 text-fg-quaternary transition duration-100 ease-linear hover:text-fg-quaternary_hover focus:text-fg-quaternary_hover">
