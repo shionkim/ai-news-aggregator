@@ -96,9 +96,13 @@ export default function ArticleCardClient({ article }: { article: Article }) {
     language: article.language,
   }).toString()
 
-  // Right-align only if the selected language or article language is Arabic
+  // List of common RTL languages
+  const rtlLanguages = ['ar', 'he', 'fa', 'ur'] // Arabic, Hebrew, Persian/Farsi, Urdu
+
+  // Right-align only if the selected language or article language is RTL
   const isRTL =
-    selected?.id === 'ar' || (article.language && article.language.toLowerCase() === 'ar')
+    (selected?.id && rtlLanguages.includes(selected.id.toLowerCase())) ||
+    (article.language && rtlLanguages.includes(article.language.toLowerCase()))
 
   return (
     <Link
