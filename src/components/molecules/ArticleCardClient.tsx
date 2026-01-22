@@ -7,7 +7,6 @@ import { formatDate } from '@/utils/formatDate'
 import { capitalizeFirstLetter } from '@/utils/capitalizeFirstLetter'
 import { useLanguage } from '@/context/LanguageContext'
 import { BadgeWithDot } from '@/components/base/badges/badges'
-// status will be shown inline next to language; no badge import needed
 
 interface Article {
   article_id: string
@@ -22,22 +21,17 @@ interface Article {
 
 export default function ArticleCardClient({ article }: { article: Article }) {
   const { selected } = useLanguage()
-  const [translated, setTranslated] = useState<{
-    title: string
-    description?: string
-  } | null>(null)
+  const [translated, setTranslated] = useState<{ title: string; description?: string } | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     let mounted = true
-    // token to ignore stale responses
     const token = Symbol('req')
 
     async function fetchTranslation() {
       const targetCode = selected?.id || 'en'
 
-      // If target language equals article language, clear any translations and don't call API
       if (!article.language || article.language.toLowerCase() === targetCode.toLowerCase()) {
         if (mounted) {
           setTranslated(null)
@@ -67,11 +61,11 @@ export default function ArticleCardClient({ article }: { article: Article }) {
 
         if (mounted && first) {
           if ((first as any).error) {
-            setError((first as any).error) // set error state
-            setTranslated(null) // clear translated state
+            setError((first as any).error)
+            setTranslated(null)
           } else {
-            setTranslated(first) // set translated
-            setError(null) // clear error state
+            setTranslated(first)
+            setError(null)
           }
         }
       } catch (err: any) {
@@ -102,10 +96,14 @@ export default function ArticleCardClient({ article }: { article: Article }) {
     language: article.language,
   }).toString()
 
+  // Right-align only if the selected language or article language is Arabic
+  const isRTL =
+    selected?.id === 'ar' || (article.language && article.language.toLowerCase() === 'ar')
+
   return (
     <Link
       href={`/articles/${article.article_id}?${queryParams}`}
-      className="flex flex-col gap-6 lg:hover:scale-[1.02] transition-transform duration-200"
+      className={`flex flex-col gap-6 lg:hover:scale-[1.02] transition-transform duration-200 ${isRTL ? 'text-right' : 'text-left'}`}
     >
       <ArticleImage
         src={article.image_url?.trim() ? article.image_url : undefined}
@@ -131,7 +129,7 @@ export default function ArticleCardClient({ article }: { article: Article }) {
           </p>
         </div>
 
-        <div>
+        <div className={`flex ${isRTL ? 'justify-end' : ''}`}>
           {error ? (
             <BadgeWithDot type="modern" color="error" size="md">
               Error

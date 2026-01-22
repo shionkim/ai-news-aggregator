@@ -1,4 +1,4 @@
-'use client' // Required for hooks/state
+'use client'
 
 import ArticleImage from '../atoms/ArticleImage'
 import { useEffect, useRef, useState } from 'react'
@@ -16,7 +16,7 @@ interface NewsArticleProps {
   pubDate: string
   image_url?: string
   source_name?: string
-  language: string
+  language?: string // original article language (optional)
   className?: string
 }
 
@@ -27,13 +27,13 @@ export default function NewsArticle({
   pubDate,
   image_url,
   source_name,
-  language, // original article language (optional)
+  language, // original article language
 }: NewsArticleProps) {
   const [fullContent, setFullContent] = useState<string>(description || '')
   const [loading, setLoading] = useState<boolean>(!!link)
   const [fetchError, setFetchError] = useState<boolean>(false)
 
-  const { selected } = useLanguage() // selected user language
+  const { selected } = useLanguage()
 
   // Translation state
   const [translatedContent, setTranslatedContent] = useState<string | null>(null)
@@ -44,7 +44,6 @@ export default function NewsArticle({
   // Fetch full article if link is provided
   useEffect(() => {
     if (!link) return
-
     setLoading(true)
     setFetchError(false)
 
@@ -65,15 +64,14 @@ export default function NewsArticle({
 
   // Translate article whenever fullContent or selected language changes
   useEffect(() => {
-    if (loading) return
-    if (!fullContent) {
+    if (loading || !fullContent) {
       setTranslatedContent(null)
       return
     }
 
     const targetLangName = selected?.name || 'English'
 
-    // Only skip translation if we **know the article language** and it matches the selected language
+    // Skip translation only if original language is known and matches target
     if (language && language.toLowerCase() === targetLangName.toLowerCase()) {
       setTranslatedContent(null)
       setTranslateError(false)
@@ -101,7 +99,6 @@ export default function NewsArticle({
 
         if (!res.ok) throw new Error('Translation failed')
         const json = await res.json()
-
         if (thisReq !== translateReqId.current) return
 
         setTranslatedContent(json.translated || fullContent)
@@ -115,16 +112,22 @@ export default function NewsArticle({
       }
     })()
 
-    return () => {
-      controller.abort()
-    }
+    return () => controller.abort()
   }, [selected, fullContent, language, loading])
+
+  // Detect RTL languages
+  const rtlLanguages = ['ar', 'he', 'fa', 'ur']
+  const isRTL =
+    rtlLanguages.includes(selected.id) ||
+    (language && rtlLanguages.includes(language.toLowerCase()))
 
   return (
     <div className="flex flex-col gap-12">
       {/* Title and metadata */}
       <div className="w-full flex flex-col gap-6 md:gap-8 max-w-2xl mx-auto">
-        <h1 className="text-3xl md:text-4xl font-semibold">{title}</h1>
+        <h1 className={`text-3xl md:text-4xl font-semibold ${isRTL ? 'text-right' : 'text-left'}`}>
+          {title}
+        </h1>
         <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2">
           <div className="flex flex-col gap-1">
             {source_name && <p className="text-sm font-semibold">{source_name}</p>}
@@ -133,10 +136,10 @@ export default function NewsArticle({
                 {formatDate(pubDate)}
                 {' • '}
                 {translating
-                  ? `${capitalizeFirstLetter(language)} (Translating)`
+                  ? `${capitalizeFirstLetter(language || selected.name)} (Translating)`
                   : translatedContent
-                    ? `${capitalizeFirstLetter(language)} (Translated)`
-                    : capitalizeFirstLetter(language)}
+                    ? `${capitalizeFirstLetter(language || selected.name)} (Translated)`
+                    : capitalizeFirstLetter(language || selected.name)}
               </p>
             )}
           </div>
@@ -164,7 +167,7 @@ export default function NewsArticle({
       )}
 
       {/* Article content */}
-      <div className="prose max-w-2xl w-full mx-auto">
+      <div className={`prose max-w-2xl w-full mx-auto ${isRTL ? 'text-right' : 'text-left'}`}>
         {loading && <p className="text-center">Loading full article...</p>}
 
         {fetchError && (
