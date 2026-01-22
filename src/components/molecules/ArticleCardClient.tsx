@@ -19,25 +19,29 @@ interface Article {
   language: string
 }
 
+interface Translation {
+  title: string
+  description?: string
+}
+
 export default function ArticleCardClient({ article }: { article: Article }) {
   const { selected } = useLanguage()
-  const [translated, setTranslated] = useState<{ title: string; description?: string } | null>(null)
+
+  const [translated, setTranslated] = useState<Translation | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
+  const articleLang = article.language?.toLowerCase()
+  const targetLang = (selected?.name || 'english').toLowerCase()
+
   useEffect(() => {
-    let mounted = true
-    const token = Symbol('req')
+    let cancelled = false
 
-    async function fetchTranslation() {
-      const targetCode = selected?.id || 'en'
-
-      if (!article.language || article.language.toLowerCase() === targetCode.toLowerCase()) {
-        if (mounted) {
-          setTranslated(null)
-          setError(null)
-          setLoading(false)
-        }
+    async function translateIfNeeded() {
+      if (!articleLang || articleLang === targetLang) {
+        setTranslated(null)
+        setLoading(false)
+        setError(null)
         return
       }
 
@@ -45,46 +49,49 @@ export default function ArticleCardClient({ article }: { article: Article }) {
       setError(null)
 
       try {
-        const res = await fetch(`/api/translate`, {
+        const res = await fetch('/api/translate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             articles: [article],
-            targetLang: selected?.name || 'English',
+            targetLang,
           }),
         })
 
-        if (!res.ok) throw new Error(`Translation failed: ${res.status}`)
+        if (!res.ok) throw new Error(`Translation failed (${res.status})`)
 
         const data = await res.json()
-        const first = Array.isArray(data?.translated) ? data.translated[0] : null
+        const result = data?.translated?.[0]
 
-        if (mounted && first) {
-          if ((first as any).error) {
-            setError((first as any).error)
-            setTranslated(null)
-          } else {
-            setTranslated(first)
-            setError(null)
-          }
+        if (!cancelled && result && !result.error) {
+          setTranslated({
+            title: result.title,
+            description: result.description,
+          })
         }
       } catch (err: any) {
-        console.error(err)
-        if (mounted) setError(err.message || 'Failed to translate')
+        if (!cancelled) {
+          console.error(err)
+          setError(err.message || 'Translation failed')
+        }
       } finally {
-        if (mounted) setLoading(false)
+        if (!cancelled) setLoading(false)
       }
     }
 
-    fetchTranslation()
+    translateIfNeeded()
 
     return () => {
-      mounted = false
+      cancelled = true
     }
-  }, [article, selected?.id, selected?.name])
+  }, [article.article_id, article.language, targetLang])
 
-  const displayTitle = translated?.title || article.title
-  const displayDescription = translated?.description || article.description
+  const displayTitle = translated?.title ?? article.title
+  const displayDescription = translated?.description ?? article.description
+
+  // ✅ Use the .dir from selected language
+  // dir === true → LTR, false → RTL
+  const isRTL = selected.dir === false
 
   const queryParams = new URLSearchParams({
     title: displayTitle,
@@ -96,26 +103,18 @@ export default function ArticleCardClient({ article }: { article: Article }) {
     language: article.language,
   }).toString()
 
-  // List of common RTL languages
-  const rtlLanguages = ['ar', 'he', 'fa', 'ur'] // Arabic, Hebrew, Persian/Farsi, Urdu
-
-  // Right-align only if the selected language or article language is RTL
-  const isRTL =
-    (selected?.id && rtlLanguages.includes(selected.id.toLowerCase())) ||
-    (article.language && rtlLanguages.includes(article.language.toLowerCase()))
-
   return (
     <Link
       href={`/articles/${article.article_id}?${queryParams}`}
-      className={`flex flex-col gap-6 lg:hover:scale-[1.02] transition-transform duration-200 ${isRTL ? 'text-right' : 'text-left'}`}
+      className={`flex flex-col gap-6 transition-transform duration-200 lg:hover:scale-[1.02] ${
+        isRTL ? 'text-right' : 'text-left'
+      }`}
     >
-      <ArticleImage
-        src={article.image_url?.trim() ? article.image_url : undefined}
-        alt={displayTitle}
-      />
+      <ArticleImage src={article.image_url?.trim() || undefined} alt={displayTitle} />
 
       <div className="flex flex-col gap-2">
         <h2 className="text-xl font-semibold">{displayTitle}</h2>
+
         {displayDescription && (
           <p className="text-gray-700">
             {displayDescription.length > 140
@@ -127,9 +126,17 @@ export default function ArticleCardClient({ article }: { article: Article }) {
 
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <p className="font-semibold text-sm">{article.source_name}</p>
+          <p className="text-sm font-semibold">{article.source_name}</p>
           <p className="text-sm text-gray-600">
-            {formatDate(article.pubDate)} • {capitalizeFirstLetter(article.language)}
+            {isRTL ? (
+              <>
+                {capitalizeFirstLetter(article.language)} • {formatDate(article.pubDate)}
+              </>
+            ) : (
+              <>
+                {formatDate(article.pubDate)} • {capitalizeFirstLetter(article.language)}
+              </>
+            )}
           </p>
         </div>
 

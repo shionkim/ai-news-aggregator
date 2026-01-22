@@ -69,7 +69,7 @@ export default function NewsArticle({
       return
     }
 
-    const targetLangName = selected?.name || 'English'
+    const targetLangName = selected?.name
 
     // Skip translation only if original language is known and matches target
     if (language && language.toLowerCase() === targetLangName.toLowerCase()) {
@@ -115,32 +115,36 @@ export default function NewsArticle({
     return () => controller.abort()
   }, [selected, fullContent, language, loading])
 
-  // Detect RTL languages
-  const rtlLanguages = ['ar', 'he', 'fa', 'ur']
-  const isRTL =
-    rtlLanguages.includes(selected.id) ||
-    (language && rtlLanguages.includes(language.toLowerCase()))
+  // Use dir from selected language context instead of locally defining RTLs
+  const isRTL = selected?.dir === false
+
+  // Label for publication info
+  const label = translating
+    ? `${capitalizeFirstLetter(language || selected.name)} (Translating)`
+    : translatedContent
+      ? `${capitalizeFirstLetter(language || selected.name)} (Translated)`
+      : capitalizeFirstLetter(language || selected.name)
 
   return (
     <div className="flex flex-col gap-12">
       {/* Title and metadata */}
-      <div className="w-full flex flex-col gap-6 md:gap-8 max-w-2xl mx-auto">
-        <h1 className={`text-3xl md:text-4xl font-semibold ${isRTL ? 'text-right' : 'text-left'}`}>
-          {title}
-        </h1>
-        <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-end gap-2">
+      <div
+        className={`w-full flex flex-col gap-6 md:gap-8 max-w-2xl mx-auto ${isRTL ? 'text-right' : 'text-left'}`}
+      >
+        <h1 className="text-3xl md:text-4xl font-semibold">{title}</h1>
+        <div
+          className={`w-full flex flex-col ${isRTL ? 'sm:flex-row-reverse' : 'sm:flex-row'} sm:justify-between sm:items-end gap-2`}
+        >
           <div className="flex flex-col gap-1">
             {source_name && <p className="text-sm font-semibold">{source_name}</p>}
-            {pubDate && (
-              <p className="text-sm text-gray-600">
-                {formatDate(pubDate)}
-                {' • '}
-                {translating
-                  ? `${capitalizeFirstLetter(language || selected.name)} (Translating)`
-                  : translatedContent
-                    ? `${capitalizeFirstLetter(language || selected.name)} (Translated)`
-                    : capitalizeFirstLetter(language || selected.name)}
-              </p>
+            {isRTL ? (
+              <>
+                {label} {' • '} {formatDate(pubDate)}
+              </>
+            ) : (
+              <>
+                {formatDate(pubDate)} {' • '} {label}
+              </>
             )}
           </div>
 

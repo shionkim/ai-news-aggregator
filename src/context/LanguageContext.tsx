@@ -7,6 +7,7 @@ type Language = {
   id: string
   name: string
   native: string
+  dir: boolean // true = LTR, false = RTL
 }
 
 interface LanguageContextType {
@@ -14,13 +15,15 @@ interface LanguageContextType {
   setSelected: (lang: Language) => void
 }
 
+const STORAGE_KEY = 'user-article-language'
+
+// Default language (English, LTR)
 const defaultLanguage: Language = {
   id: 'en',
   name: languageNameMap['en'].name,
   native: languageNameMap['en'].native,
+  dir: languageNameMap['en'].dir === 1, // 1 = LTR
 }
-
-const STORAGE_KEY = 'user-article-language'
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
@@ -39,9 +42,12 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
             id: parsed.id,
             name: languageNameMap[parsed.id].name,
             native: languageNameMap[parsed.id].native,
+            dir: languageNameMap[parsed.id].dir === 1, // 1 = LTR, 0 = RTL
           })
         }
-      } catch {}
+      } catch (err) {
+        console.error('Failed to parse saved language', err)
+      }
     }
     setHydrated(true)
   }, [])

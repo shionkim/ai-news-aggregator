@@ -57,6 +57,7 @@ export default function LanguageSelector() {
                         id: code,
                         name: lang.name,
                         native: lang.native,
+                        dir: lang.dir === 1,
                       })
                       closeLanguage() // 🔑 close after select
                     }}
