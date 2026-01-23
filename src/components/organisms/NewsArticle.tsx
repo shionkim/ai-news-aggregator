@@ -135,17 +135,11 @@ export default function NewsArticle({
         <div
           className={`w-full flex flex-col ${isRTL ? 'sm:flex-row-reverse' : 'sm:flex-row'} sm:justify-between sm:items-end gap-2`}
         >
-          <div className="flex flex-col gap-1">
-            {source_name && <p className="text-sm font-semibold">{source_name}</p>}
-            {isRTL ? (
-              <>
-                {label} {' • '} {formatDate(pubDate)}
-              </>
-            ) : (
-              <>
-                {formatDate(pubDate)} {' • '} {label}
-              </>
-            )}
+          <div className="flex flex-col gap-1 text-sm">
+            {source_name && <p className="font-semibold">{source_name}</p>}
+            <p className="text-secondary">
+              {isRTL ? `${label} • ${formatDate(pubDate)}` : `${formatDate(pubDate)} • ${label}`}
+            </p>
           </div>
 
           {link && (
