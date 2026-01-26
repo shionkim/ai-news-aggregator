@@ -34,8 +34,6 @@ export default async function FilterPage({ searchParams }: PageProps) {
   if (countryParam) url += `&country=${countryParam}`
   if (languageParam) url += `&language=${languageParam}`
 
-  console.log('Filters URL:', url)
-
   let content
 
   try {
