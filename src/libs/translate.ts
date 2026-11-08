@@ -64,7 +64,7 @@ async function translateWithOpenAI(prompt: string, model?: string) {
 
 async function translateWithGemini(prompt: string, model?: string) {
   const genModel = genAI.getGenerativeModel({
-    model: model || process.env.GEMINI_MODEL || "gemini-2.5-flash-lite",
+    model: model || process.env.GEMINI_MODEL || "gemini-3.5-flash-lite",
   });
   const response = await genModel.generateContent(prompt);
   return response.response.text().trim();
